@@ -3,3 +3,31 @@
     `npm search @types/express`
     et si le type est disponible , on peut l'installé comme `npm install --save-dev @types/express`, 
     utiliser --save-dev pour ajouter les types en tant que dépendance de développement.
+
+** MVC 
+    src ¦- app.js
+        ¦- /api
+        ¦- /config
+        ¦- /services
+        ¦- /models
+        ¦- /scripts
+        ¦- /subscriber
+        ¦- /test
+
+
+Modèle (Model) : Le modèle représente la structure des données de votre application. Il définit comment les données sont organisées, 
+                 stockées et manipulées. Dans le contexte d'une base de données, le modèle peut correspondre aux schémas des tables 
+                 et aux opérations CRUD (Création, Lecture, Mise à jour, Suppression) associées.
+    Exemple :    Le fichier user.dao pourrait définir des fonctions pour interagir avec la base de données, 
+                 telles que getUserById, createUser, updateUser, deleteUser, etc. Il encapsule généralement les requêtes SQL 
+                 ou les interactions avec une base de données NoSQL.
+
+Contrôleur (Controller) : Le contrôleur agit comme un intermédiaire entre les vues et les modèles. Il reçoit les requêtes de l'utilisateur, 
+                 traite les données nécessaires à partir du modèle, puis retourne la réponse appropriée à la vue ou au client.
+    Exemple : Un contrôleur user.controller pourrait appeler les fonctions du modèle user.dao pour récupérer des données 
+              d'utilisateur et les préparer pour l'affichage dans une vue ou pour répondre à une requête HTTP.
+
+Vue (View) : La vue est la partie de l'application qui est visible pour les utilisateurs. 
+            Elle présente les données du modèle à l'utilisateur et interagit souvent avec le contrôleur pour transmettre les actions de l'utilisateur.
+    Exemple : Dans une application web, la vue pourrait être une page HTML qui affiche les détails d'un utilisateur, 
+              tandis que le contrôleur récupère ces détails à partir du modèle.
