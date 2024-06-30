@@ -1,0 +1,22 @@
+** Informational responses (100 – 199)
+    - 100 Continue
+    - 101 Switching Protocols
+    - 102 Processing 
+    - 103 Early Hints
+    ... 
+
+** Successful responses (200 – 299)
+    - 200 OK
+    - 201 Created
+    - 202 Accepted
+    - 203 Non-Authoritative Information
+    - 204 No Content
+    - 205 Reset Content
+    - 206 Partial Content
+    - 207 Multi-Status 
+    ...
+    - 302 Found
+
+** Redirection messages  (300 – 399)
+** Client error responses  (400 – 499)
+** Server error responses (500 – 599)

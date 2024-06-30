@@ -1,0 +1,5 @@
+** rechercher s'il existe des types TypeScript disponibles pour le module, par exemple module express 
+    ` @types/module-name.`
+    `npm search @types/express`
+    et si le type est disponible , on peut l'installé comme `npm install --save-dev @types/express`, 
+    utiliser --save-dev pour ajouter les types en tant que dépendance de développement.
