@@ -38,12 +38,13 @@ export const removeById = (userID : number) : Array<UserI> =>{
 }
 // fonction pour le mije à jours
 export const updateByNewUser = (id : number,newDetails : UserI) =>{
-    let updated;
+    let userUpdated;
+    // arrow function inside the map
     users.map((user,index) =>{
         if ((user.id == id) && (user != newDetails)){
             users[index] = newDetails
-            updated = users[index]
+            userUpdated = users[index]
          }
     })
-    return updated
+    return userUpdated
 }

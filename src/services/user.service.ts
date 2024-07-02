@@ -4,21 +4,13 @@ import  {insert,getOne,getAll,removeById, updateByNewUser} from "../models/persi
 import UserI from "../models/persistence/user.models"
 
 // Pour l'insertion d'utilisateur
-export const addUser = (details : UserI) =>{
-    return insert(details);
-}
+export const addUser = (details : UserI) => insert(details);
 // Pour avoire un utilisateur 
-export const getUserbyId = (userID : number) =>{
-    return getOne(userID);
-}
+export const getUserbyId = (userID : number) => getOne(userID);
 // Pour avoir tout l'utilisateur
-export const getUsers = () =>{
-    return getAll();
-}
+export const getUsers = () => getAll(); 
 // Pour modification d'utilisateur
-export const updateUser = (id:number,newDetails : UserI) =>{           
-    return updateByNewUser(id,newDetails);
-}
+export const updateUser = (id:number,newDetails : UserI) => updateByNewUser(id,newDetails);
 
 // Pour supprimer l'utilisateur
 export const deleteUser = (userID : number) =>{
