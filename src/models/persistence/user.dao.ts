@@ -38,9 +38,15 @@ export const removeById = (userID : number) : Array<UserI> =>{
 }
 // fonction pour le mije à jours
 export const updateByNewUser = (id : number,newDetails : UserI) =>{
-    users.forEach((user,index) => {
+    users.map((user,index) =>{
+        if ((user.id == id) && (user != newDetails)){
+            users[index] = newDetails
+         }
+    })
+
+    /*users.forEach((user,index) => {
         if ((user.id == id) && (user != newDetails)){
            users[index] = newDetails
         }
-    });
+    });*/
 }
