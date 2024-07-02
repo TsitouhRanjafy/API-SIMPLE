@@ -59,11 +59,25 @@ class Routes {
             res.status(200).send(deleteUser(id));
         })
         // POST '/mije à jour'
-        this.rout.post('/update',(req: Request,res : Response) =>{
-            let newDetails = req.body
-            let id = newDetails.id
-            updateUser(id,newDetails);
-            res.send({"status":"en cours"})
+        this.rout.put('/update/:id',(req: Request,res : Response) =>{
+            let {body : newDetails} = req
+            let id = parseInt(req.params.id)
+            // pour la gestion id
+            newDetails.id = id;
+            const updated = updateUser(id,newDetails);
+
+            if (!updated){ 
+                return res.status(404).send({
+                    status : 404,
+                    message : `user ${id} not found`
+                })
+            }else{
+                return res.status(302).send({
+                    status : 302,
+                    message : updated
+                })
+            }
+            
         })
     }
 }   
