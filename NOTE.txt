@@ -31,3 +31,13 @@ Vue (View) : La vue est la partie de l'application qui est visible pour les util
             Elle présente les données du modèle à l'utilisateur et interagit souvent avec le contrôleur pour transmettre les actions de l'utilisateur.
     Exemple : Dans une application web, la vue pourrait être une page HTML qui affiche les détails d'un utilisateur, 
               tandis que le contrôleur récupère ces détails à partir du modèle.
+
+
+** validate our endpoints
+    on va maintenant valider les input que l'on receive depuis le body
+    exemple de librairie pour ça c'est 'yup'
+    il nous aide à valider les email,nom ou d'autre
+
+    Yup is a schema builder for runtime value parsing and validation. Define a schema, transform a value to match, 
+    assert the shape of an existing value, or both. Yup schema are extremely expressive and allow modeling complex, 
+    interdependent validations, or value transformation.
