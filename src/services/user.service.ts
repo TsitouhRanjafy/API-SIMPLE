@@ -5,7 +5,7 @@ import UserI from "../models/persistence/user.models"
 
 // Pour l'insertion d'utilisateur
 export const addUser = (details : UserI) =>{
-    insert(details);
+    return insert(details);
 }
 // Pour avoire un utilisateur 
 export const getUserbyId = (userID : number) =>{
