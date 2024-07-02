@@ -17,7 +17,7 @@ export const getUsers = () =>{
 }
 // Pour modification d'utilisateur
 export const updateUser = (id:number,newDetails : UserI) =>{           
-    updateByNewUser(id,newDetails);
+    return updateByNewUser(id,newDetails);
 }
 
 // Pour supprimer l'utilisateur
