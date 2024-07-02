@@ -6,6 +6,7 @@ import { Application , Request, Response} from "express";
 import users from "./models/data/users.data";
 // Importation du service utilisateur 
 import { addUser, deleteUser, getUserbyId,getUsers,updateUser } from "./services/user.service";
+import { removeById } from "./models/persistence/user.dao";
 
 // Class qui gère le Route
 class Routes {
@@ -32,12 +33,33 @@ class Routes {
         this.rout.get('/affiche',(req : Request,res : Response)=>{
             const data = req.body
             const id : number = data.id
-            res.status(302).send(getUserbyId(id)) // FOUND
+            if (id === undefined ){
+                res.status(204).send({"input id ":"not definie"}) // 
+            }else{
+                if (getUserbyId(id) === undefined){
+                    res.status(404).send({"status":"not found"}) // NOT FOUND
+                }else{
+                    res.status(302).send(getUserbyId(id)) // FOUND
+                }
+            }
         })
         // GET '/affiches'
         this.rout.get('/affiches',(req : Request,res : Response)=>{
             let data = getUsers();
             res.status(200).send(JSON.stringify(data)) // OK
+        })
+        // POST '/supprimer'
+        this.rout.get('/supprimer',(req : Request,res : Response)=>{
+            let data = req.body
+            const id : number = data.id
+            res.status(200).send(deleteUser(id));
+        })
+        // POST '/mije à jour'
+        this.rout.post('/update',(req: Request,res : Response) =>{
+            let newDetails = req.body
+            let id = newDetails.id
+            updateUser(id,newDetails);
+            res.send({"status":"en cours"})
         })
     }
 }   

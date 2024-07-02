@@ -11,7 +11,6 @@ export const insert = (details : UserI ) : UserI  => {
     users.push(newUser);
     return newUser
 }
-
 // fonction qui permet d'avoir un utilisateur
 export const getOne = (id : number) : UserI | undefined  => {
     let result;
@@ -23,8 +22,25 @@ export const getOne = (id : number) : UserI | undefined  => {
     });
     return result
 }
-
 // fonction qui permet d'avoir tout l'utilisateur
 export const getAll = () : UserI | Array<UserI> | undefined => {
     return users
+}
+// fonction qui permet de supprimer un utilisateur 
+export const removeById = (userID : number) : Array<UserI> =>{
+    let removed : any;
+    users.forEach((user,index) => {
+        if (user.id == userID){
+            removed = users.splice(index,1);
+        }
+    });
+    return removed
+}
+// fonction pour le mije à jours
+export const updateByNewUser = (id : number,newDetails : UserI) =>{
+    users.forEach((user,index) => {
+        if ((user.id == id) && (user != newDetails)){
+           users[index] = newDetails
+        }
+    });
 }

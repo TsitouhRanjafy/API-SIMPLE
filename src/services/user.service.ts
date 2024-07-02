@@ -1,5 +1,5 @@
 // Importation du service modèl insertion
-import  {insert,getOne,getAll} from "../models/persistence/user.dao"
+import  {insert,getOne,getAll,removeById, updateByNewUser} from "../models/persistence/user.dao"
 // Importation du type utilisateur 
 import UserI from "../models/persistence/user.models"
 
@@ -7,23 +7,33 @@ import UserI from "../models/persistence/user.models"
 export const addUser = (details : UserI) =>{
     insert(details);
 }
-
 // Pour avoire un utilisateur 
 export const getUserbyId = (userID : number) =>{
-    return getOne(userID)
+    return getOne(userID);
 }
-
+// Pour avoir tout l'utilisateur
 export const getUsers = () =>{
     return getAll();
 }
-
-
 // Pour modification d'utilisateur
-export const updateUser = (details : UserI) =>{
+export const updateUser = (id:number,newDetails : UserI) =>{           
+    updateByNewUser(id,newDetails);
 }
 
 // Pour supprimer l'utilisateur
-export const deleteUser = (details : UserI) =>{
-}
+export const deleteUser = (userID : number) =>{
+    let result = removeById(userID);
+    if (result === undefined){
+        return ({"status":"not trouvé"});
+    }
+    return result;
+}   
 
-//export default addUser
+
+
+
+
+
+
+
+
