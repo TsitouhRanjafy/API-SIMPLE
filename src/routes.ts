@@ -17,12 +17,13 @@ class Routes {
         this.rout = app;
     }
 
-    // méthode
+    // Méthode
     public initialisation(){
         // GET '/'
         this.rout.get('/',(req : Request,res : Response)=>{
             res.status(200).send({"status":"ok"}); // OK
         })
+
         // POST '/add'
         this.rout.post('/add',(req : Request,res : Response)=>{
             const {body : utilisateur} = req
@@ -32,32 +33,49 @@ class Routes {
                 message : ajoutUser
             }) // CREATED
         })
-        // GET '/affiche'
-        this.rout.get('/affiche',(req : Request,res : Response)=>{
-            const data = req.body
-            const id : number = data.id
-            if (id === undefined ){
-                res.status(204).send({"input id ":"not definie"}) // 
-            }else{
-                if (getUserbyId(id) === undefined){
-                    res.status(404).send({"status":"not found"}) // NOT FOUND
-                }else{
-                    res.status(302).send(getUserbyId(id)) // FOUND
-                }
-            }
 
+        // GET '/affiche'
+        this.rout.get('/affiche/:id',(req : Request,res : Response)=>{
+            const id : number = parseInt(req.params.id,10) // 2 le id maximum
+            const userGeted =  getUserbyId(id)
+            if (userGeted === undefined){
+                res.status(404).send({
+                    status :"NOT FOUND",
+                    message : userGeted
+
+                }) // NOT FOUND
+            }else{
+                res.status(200).send({
+                    status :"OK",
+                    message : userGeted
+                }) // FOUND
+            }
         })
+
         // GET '/affiches'
         this.rout.get('/affiches',(req : Request,res : Response)=>{
             let data = getUsers();
             res.status(200).send(JSON.stringify(data)) // OK
         })
+
         // POST '/supprimer'
-        this.rout.get('/supprimer',(req : Request,res : Response)=>{
-            let data = req.body
-            const id : number = data.id
-            res.status(200).send(deleteUser(id));
+        this.rout.delete('/supprimer/:id',(req : Request,res : Response)=>{
+            const id = parseInt(req.params.id,10);
+            const user = getUserbyId(id)
+            if (user){
+                res.status(200).send({
+                    status : "OK",
+                    message : deleteUser(id)
+                });
+            } else {
+                res.status(404).send({
+                    status : "NO",
+                    message : `User ${id} hasn't been deleted`
+                });
+            }
+            
         })
+
         // POST '/mije à jour'
         this.rout.put('/update/:id',(req: Request,res : Response) =>{
             let {body : newDetails} = req
@@ -68,12 +86,12 @@ class Routes {
 
             if (!updated){ 
                 return res.status(404).send({
-                    status : 404,
+                    status : "NOT FOUND",
                     message : `user ${id} not found`
-                })
+                }) 
             }else{
-                return res.status(302).send({
-                    status : 302,
+                return res.status(200).send({
+                    status : "OK",
                     message : updated
                 })
             }
