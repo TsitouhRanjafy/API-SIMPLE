@@ -102,7 +102,7 @@ export class AffichesUserControllers{
     public getRouter() : Router {
         return this.router
     }
-}
+}   
 export class AddUserControllers{
     // propriété
     private router : Router
