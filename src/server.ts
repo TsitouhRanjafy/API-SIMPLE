@@ -4,7 +4,8 @@ import express, { Application , Request, Response, Router} from "express";
 import path from 'path'
 import Routes from "./routes";
 import dotenv from "dotenv"
-
+// Qui permet de securiser notre application express
+import helmet from "helmet";
 // Creation d'un instance  d'application avec express    
 const app : Application = express();
 // definition du port du serveur
@@ -16,7 +17,8 @@ const port = process.env.PORT || 3000
 
 // Midlleware qui permet de parser les JSON
 app.use(express.json());
-
+// pour securiser notre application express
+app.use(helmet())
 // __________________________ END__________________________ //
 
 // __________________________ GESTION DE ROUTE START __________________________ //
@@ -31,7 +33,7 @@ routes.initialisation();
 // __________________________ DEMARRAGE SERVEUR START __________________________ //
 
 app.listen(port, async() =>{
-    console.log(`le serveur est demarrer sur le port \"\http://localhost:${port} "`)
+    console.log(`le serveur est demarrer sur le port \"http://localhost:${port}\"`)
 })
 
 // __________________________ END __________________________ //
