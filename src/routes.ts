@@ -2,11 +2,17 @@
 
 // Importation des interfaces , Request , Response dans express
 import { Application , Request, Response} from "express";
-// Importation du donnée
-import users from "./models/data/users.data";
 // Importation du service utilisateur 
 import { addUser, deleteUser, getUserbyId,getUsers,updateUser } from "./services/user.service";
-import { removeById } from "./models/persistence/user.dao";
+// Importation de yup express middleware qui permet de valider les input qui vient de body
+import { expressYupMiddleware} from "express-yup-middleware";
+// Importation de user schema
+import { addUserSchemaValidator,updateUserSchemaValidator } from "./user.schema.valid";
+// Importation status code qui permet retourné d'un manière expère status code http
+import {StatusCodes,ReasonPhrases} from 'http-status-codes'
+import UpdateUserControllers from "./controllers/user.controllers";
+
+
 
 // Class qui gère le Route
 class Routes {
@@ -21,17 +27,24 @@ class Routes {
     public initialisation(){
         // GET '/'
         this.rout.get('/',(req : Request,res : Response)=>{
-            res.status(200).send({"status":"ok"}); // OK
+            res.status(StatusCodes.OK).send({"status":"OK"}); // OK
         })
 
         // POST '/add'
-        this.rout.post('/add',(req : Request,res : Response)=>{
+        this.rout.post(
+            '/add',
+            // pour le schema validation
+            expressYupMiddleware({
+                schemaValidator: addUserSchemaValidator
+                ,expectedStatusCode : StatusCodes.BAD_REQUEST
+            }),
+            (req : Request,res : Response)=>{
             const {body : utilisateur} = req
             const ajoutUser = addUser(utilisateur);  
-            return res.status(201).send({
-                status : 201,
+            return res.status(StatusCodes.ACCEPTED).send({
+                status : ReasonPhrases.ACCEPTED,
                 message : ajoutUser
-            }) // CREATED
+            }) 
         })
 
         // GET '/affiche'
@@ -39,23 +52,23 @@ class Routes {
             const id : number = parseInt(req.params.id,10) // 2 le id maximum
             const userGeted =  getUserbyId(id)
             if (userGeted === undefined){
-                res.status(404).send({
-                    status :"NOT FOUND",
+                res.status(StatusCodes.NOT_FOUND).send({
+                    status : ReasonPhrases.NOT_FOUND,
                     message : userGeted
 
-                }) // NOT FOUND
+                })
             }else{
-                res.status(200).send({
-                    status :"OK",
+                res.status(StatusCodes.OK).send({
+                    status :ReasonPhrases.OK,
                     message : userGeted
-                }) // FOUND
+                })
             }
         })
 
         // GET '/affiches'
         this.rout.get('/affiches',(req : Request,res : Response)=>{
             let data = getUsers();
-            res.status(200).send(JSON.stringify(data)) // OK
+            res.status(StatusCodes.OK).send(JSON.stringify(data)) // OK
         })
 
         // POST '/supprimer'
@@ -63,40 +76,22 @@ class Routes {
             const id = parseInt(req.params.id,10);
             const user = getUserbyId(id)
             if (user){
-                res.status(200).send({
-                    status : "OK",
+                res.status(StatusCodes.OK).send({
+                    status : ReasonPhrases.OK,
                     message : deleteUser(id)
                 });
             } else {
-                res.status(404).send({
-                    status : "NO",
+                res.status(StatusCodes.NOT_FOUND).send({
+                    status : ReasonPhrases.NOT_FOUND,
                     message : `User ${id} hasn't been deleted`
                 });
             }
             
         })
 
-        // POST '/mije à jour'
-        this.rout.put('/update/:id',(req: Request,res : Response) =>{
-            let {body : newDetails} = req
-            let id = parseInt(req.params.id)
-            // pour la gestion id
-            newDetails.id = id;
-            const updated = updateUser(id,newDetails);
-
-            if (!updated){ 
-                return res.status(404).send({
-                    status : "NOT FOUND",
-                    message : `user ${id} not found`
-                }) 
-            }else{
-                return res.status(200).send({
-                    status : "OK",
-                    message : updated
-                })
-            }
-            
-        })
+        // Gestion de rout '/update'
+        const update : UpdateUserControllers = new UpdateUserControllers()
+        this.rout.use('/update',update.getRouter())
     }
 }   
 
