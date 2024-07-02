@@ -25,9 +25,12 @@ class Routes {
         })
         // POST '/add'
         this.rout.post('/add',(req : Request,res : Response)=>{
-            const data = req.body
-            addUser(data);  
-            res.status(201).send({"status" : "CREATED"}) // CREATED
+            const {body : utilisateur} = req
+            const ajoutUser = addUser(utilisateur);  
+            return res.status(201).send({
+                status : 201,
+                message : ajoutUser
+            }) // CREATED
         })
         // GET '/affiche'
         this.rout.get('/affiche',(req : Request,res : Response)=>{
@@ -42,6 +45,7 @@ class Routes {
                     res.status(302).send(getUserbyId(id)) // FOUND
                 }
             }
+
         })
         // GET '/affiches'
         this.rout.get('/affiches',(req : Request,res : Response)=>{
