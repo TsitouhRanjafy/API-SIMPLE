@@ -2,15 +2,15 @@
 
 // Importation des interfaces , Request , Response dans express
 import { Application , Request, Response} from "express";
-// Importation du service utilisateur 
-import { addUser, deleteUser, getUserbyId,getUsers,updateUser } from "./services/user.service";
-// Importation de yup express middleware qui permet de valider les input qui vient de body
-import { expressYupMiddleware} from "express-yup-middleware";
-// Importation de user schema
-import { addUserSchemaValidator,updateUserSchemaValidator } from "./user.schema.valid";
 // Importation status code qui permet retourné d'un manière expère status code http
 import {StatusCodes,ReasonPhrases} from 'http-status-codes'
-import UpdateUserControllers from "./controllers/user.controllers";
+import { 
+    UpdateUserControllers ,
+     AfficheUserControllers,
+      AddUserControllers,
+      AffichesUserControllers,
+       DeleteUserControllers
+} from "./controllers/user.controllers";
 
 
 
@@ -25,69 +25,26 @@ class Routes {
 
     // Méthode
     public initialisation(){
-        // GET '/'
+        // Gestion de rout  '/'
         this.rout.get('/',(req : Request,res : Response)=>{
             res.status(StatusCodes.OK).send({"status":"OK"}); // OK
         })
 
-        // POST '/add'
-        this.rout.post(
-            '/add',
-            // pour le schema validation
-            expressYupMiddleware({
-                schemaValidator: addUserSchemaValidator
-                ,expectedStatusCode : StatusCodes.BAD_REQUEST
-            }),
-            (req : Request,res : Response)=>{
-            const {body : utilisateur} = req
-            const ajoutUser = addUser(utilisateur);  
-            return res.status(StatusCodes.ACCEPTED).send({
-                status : ReasonPhrases.ACCEPTED,
-                message : ajoutUser
-            }) 
-        })
+        // Gestion de rout '/add'
+       const add : AddUserControllers = new AddUserControllers()
+       this.rout.use('/add',add.getRouter())
 
-        // GET '/affiche'
-        this.rout.get('/affiche/:id',(req : Request,res : Response)=>{
-            const id : number = parseInt(req.params.id,10) // 2 le id maximum
-            const userGeted =  getUserbyId(id)
-            if (userGeted === undefined){
-                res.status(StatusCodes.NOT_FOUND).send({
-                    status : ReasonPhrases.NOT_FOUND,
-                    message : userGeted
+        // Gestion de rout '/affiche'
+        const afficheOne : AfficheUserControllers = new AfficheUserControllers()
+        this.rout.use('/affiche',afficheOne.getRouter());
 
-                })
-            }else{
-                res.status(StatusCodes.OK).send({
-                    status :ReasonPhrases.OK,
-                    message : userGeted
-                })
-            }
-        })
+        // Gestion de rout  '/affiches'
+        const affiches : AffichesUserControllers = new AffichesUserControllers()
+        this.rout.use('/affiches',affiches.getRouter())
 
-        // GET '/affiches'
-        this.rout.get('/affiches',(req : Request,res : Response)=>{
-            let data = getUsers();
-            res.status(StatusCodes.OK).send(JSON.stringify(data)) // OK
-        })
-
-        // POST '/supprimer'
-        this.rout.delete('/supprimer/:id',(req : Request,res : Response)=>{
-            const id = parseInt(req.params.id,10);
-            const user = getUserbyId(id)
-            if (user){
-                res.status(StatusCodes.OK).send({
-                    status : ReasonPhrases.OK,
-                    message : deleteUser(id)
-                });
-            } else {
-                res.status(StatusCodes.NOT_FOUND).send({
-                    status : ReasonPhrases.NOT_FOUND,
-                    message : `User ${id} hasn't been deleted`
-                });
-            }
-            
-        })
+        // Gestion de rout '/delete'
+        const remove : DeleteUserControllers = new DeleteUserControllers
+        this.rout.use('/delete',remove.getRouter())
 
         // Gestion de rout '/update'
         const update : UpdateUserControllers = new UpdateUserControllers()
